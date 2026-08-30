@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="it"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ring options</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600;700&family=Manrope:wght@800&display=swap" rel="stylesheet">
+<style>
+:root{--red:#ff2b40;--red-deep:#c8102e;--blue:#3d7bff;--blue-deep:#123a8f}
+*{margin:0;box-sizing:border-box}
+body{font-family:"Manrope",sans-serif;background:#0b0713}
+.opt{position:relative;min-height:52vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:48px 20px;overflow:hidden;
+  background:linear-gradient(100deg,#c8102e 0%,#ff2b40 42%,#3d7bff 58%,#123a8f 100%)}
+.opt+.opt{border-top:3px solid #0b0713}
+/* background stripes — same scanline overlay used in the landing's Red o Blue block */
+.scan{position:absolute;inset:0;pointer-events:none;opacity:.12;mix-blend-mode:overlay;background:repeating-linear-gradient(0deg,#000 0 2px,transparent 2px 4px)}
+.tag{position:absolute;top:16px;left:16px;z-index:3;font-weight:800;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:#fff;background:rgba(0,0,0,.35);border:1px solid rgba(255,255,255,.3);border-radius:999px;padding:7px 14px;max-width:calc(100% - 32px);text-align:left}
+.q{position:relative;z-index:2;font-family:"Fredoka",sans-serif;font-weight:700;font-size:clamp(2.6rem,8vw,5.6rem);color:#fff;line-height:.9;text-shadow:0 0 26px rgba(255,255,255,.35),0 0 60px rgba(255,255,255,.2)}
+.lbl{position:relative;z-index:2;margin-top:22px;font-weight:800;letter-spacing:.2em;text-transform:uppercase;font-size:.8rem;color:#fff}
+.note{position:relative;z-index:2;margin-top:8px;max-width:540px;font-weight:700;font-size:.82rem;color:rgba(255,255,255,.9)}
+
+/* ===== the SVG donut (variant F seam) reused at different size / alignment ===== */
+.svgo{display:inline-block;width:.56em;height:.56em;vertical-align:-.08em;margin:0 .05em;animation:spin 5s linear infinite;filter:drop-shadow(0 1px 3px rgba(0,0,0,.5))}
+.svgo svg{width:100%;height:100%;display:block}
+.svgo.big{width:.74em;height:.74em}
+.svgo.med{width:.64em;height:.64em}          /* F3: between F and big */
+.svgo.mid{vertical-align:.06em}              /* raised to cap-height centre (inline use) */
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* inline CSS-conic donuts (A/B/C) */
+.o{display:inline-block;width:.52em;height:.52em;border-radius:50%;vertical-align:-0.02em;margin:0 .04em;
+  -webkit-mask:radial-gradient(closest-side,transparent 50%,#000 53%);mask:radial-gradient(closest-side,transparent 50%,#000 53%);
+  animation:spin 5s linear infinite;filter:drop-shadow(0 1px 3px rgba(0,0,0,.5))}
+.oA{background:conic-gradient(from 0deg,var(--red) 0 50%,var(--blue) 50% 100%)}
+.oB{background:conic-gradient(from 0deg,#fff 0 5%,var(--red) 13% 37%,#fff 45% 55%,var(--blue) 63% 87%,#fff 95% 100%)}
+.oC{background:conic-gradient(from 0deg,#fff 0 3.5%,var(--red) 3.5% 46.5%,#fff 46.5% 53.5%,var(--blue) 53.5% 96.5%,#fff 96.5% 100%)}
+
+/* ===== centred-at-the-purple-midpoint layout: effect pinned to 50%, words pushed symmetrically ===== */
+.q.split{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:.14em;max-width:1100px;margin:0 auto}
+.q.split .side{white-space:nowrap}
+.q.split .l{justify-self:end}
+.q.split .r{justify-self:start}
+
+/* ===== generic inline slot so a full effect can stand in for the "o"; font-size scales the whole effect ===== */
+.slot{display:inline-flex;width:1em;height:1em;line-height:1;vertical-align:-.16em;align-items:center;justify-content:center;margin:0 .06em}
+.slot.s72{font-size:.72em}
+.slot.s68{font-size:.68em}
+.slot.s66{font-size:.66em}
+.slot.s80{font-size:.80em}
+
+/* ---------- Effect 1: ORB (uiverse narmesh_sah/curvy-swan-48) — our red/blue ---------- */
+.orb-container{position:relative;width:1em;height:1em;display:flex;justify-content:center;align-items:center;overflow:hidden;border-radius:50%;rotate:90deg;
+  filter:drop-shadow(0 0 6px #ff2b4088) drop-shadow(0 0 6px #3d7bff88)}
+.orb{position:absolute;width:1em;aspect-ratio:1;border-radius:50%;background:#060606;filter:blur(.12em);animation:orbspin 6s infinite}
+.orb-inner{position:absolute;left:-120%;top:-25%;width:160%;aspect-ratio:1;border-radius:50%;background:var(--red);
+  clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);animation:orbspin 6s linear infinite}
+.orb-inner:nth-child(2){left:auto;right:-120%;top:auto;bottom:-25%;background:var(--blue);animation-duration:8s;
+  clip-path:polygon(20% 0%,0% 20%,30% 50%,0% 80%,20% 100%,50% 70%,80% 100%,100% 80%,70% 50%,100% 20%,80% 0%,50% 30%)}
+@keyframes orbspin{to{transform:rotate(360deg)}}
+
+/* ---------- Effect 2: BALL (uiverse tough-baboon-84) — centred, oscillates through the purple ---------- */
+.ball2{--s:.32em;--t:.30em;width:var(--s);height:var(--s);border-radius:50%;background:#000;
+  animation:ballosc .9s infinite alternate cubic-bezier(.68,-.55,.265,1.55)}
+@keyframes ballosc{0%{background:var(--red);transform:translateX(calc(var(--t)*-1))}100%{background:var(--blue);transform:translateX(var(--t))}}
+
+/* ---------- Effect 3: glow PILL spinner (uiverse lucky-falcon-75) — our red/blue ---------- */
+.spinner{background-image:linear-gradient(var(--red) 35%,var(--blue));width:1em;height:1em;animation:pillspin 1.7s linear infinite;border-radius:.3em;filter:blur(1px);
+  box-shadow:0 -.05em .2em 0 var(--red),0 .05em .2em 0 var(--blue)}
+.spinner1{background-color:rgba(36,36,36,.9);width:1em;height:1em;border-radius:.3em;filter:blur(.1em)}
+@keyframes pillspin{to{transform:rotate(360deg)}}
+
+/* ---------- Effect 3b (NEW): two horizontal capsules stacked with a gap, rotating together ---------- */
+.pills{display:inline-flex;flex-direction:column;gap:.14em;align-items:center;justify-content:center;animation:spin 3.4s linear infinite}
+.pills i{display:block;width:1em;height:.34em;border-radius:.2em;box-shadow:0 1px 4px rgba(0,0,0,.4)}
+.pills.sm{gap:.1em}
+.pills.sm i{width:.8em;height:.26em}
+.pills i.r{background:var(--red)}
+.pills i.b{background:var(--blue)}
+
+/* ---------- Effect 4: DUAL RING (uiverse funny-catfish-94) — our red/blue ---------- */
+.dring{width:1em;height:1em;border:.09em solid transparent;border-top-color:var(--blue);border-radius:50%;display:flex;align-items:center;justify-content:center;animation:spin 1s linear infinite}
+.dring .inner{width:.72em;height:.72em;border:.09em solid transparent;border-top-color:var(--red);border-radius:50%;animation:spin 1s linear infinite}
+
+@media(prefers-reduced-motion:reduce){*{animation:none!important}}
+</style></head><body>
+
+<!-- ==================== EXISTING SEAM OPTIONS ==================== -->
+<section class="opt"><div class="scan"></div><div class="tag">A · both seams sharp (no white)</div>
+  <div class="q">Red <span class="o oA"></span> Blue?</div><div class="lbl">Opzione A</div></section>
+
+<section class="opt"><div class="scan"></div><div class="tag">B · both seams through white</div>
+  <div class="q">Red <span class="o oB"></span> Blue?</div><div class="lbl">Opzione B</div></section>
+
+<section class="opt"><div class="scan"></div><div class="tag">C · solid halves + thin white stripe at each seam</div>
+  <div class="q">Red <span class="o oC"></span> Blue?</div><div class="lbl">Opzione C</div></section>
+
+<section class="opt"><div class="scan"></div><div class="tag">F · current live ring (baseline)</div>
+  <div class="q">Red <span class="svgo"><svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+    <defs><mask id="rF"><rect width="100" height="100" fill="#000"/><circle cx="50" cy="50" r="43" fill="#fff"/><circle cx="50" cy="50" r="24" fill="#000"/></mask></defs>
+    <g mask="url(#rF)"><rect width="50" height="100" fill="#ff2b40"/><rect x="50" width="50" height="100" fill="#3d7bff"/>
+    <rect x="47.6" y="5" width="4.8" height="23" fill="#fff"/><rect x="47.6" y="72" width="4.8" height="23" fill="#fff"/></g></svg></span> Blue?</div>
+  <div class="lbl">Opzione F — attuale</div></section>
+
+<!-- ==================== donut size / position tweaks ==================== -->
+<section class="opt"><div class="scan"></div><div class="tag">F1 · bigger + raised — ring centred between the d and the B</div>
+  <div class="q">Red <span class="svgo big mid"><svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+    <defs><mask id="rF1"><rect width="100" height="100" fill="#000"/><circle cx="50" cy="50" r="43" fill="#fff"/><circle cx="50" cy="50" r="24" fill="#000"/></mask></defs>
+    <g mask="url(#rF1)"><rect width="50" height="100" fill="#ff2b40"/><rect x="50" width="50" height="100" fill="#3d7bff"/>
+    <rect x="47.6" y="5" width="4.8" height="23" fill="#fff"/><rect x="47.6" y="72" width="4.8" height="23" fill="#fff"/></g></svg></span> Blue?</div>
+  <div class="lbl">Opzione F1</div></section>
+
+<section class="opt"><div class="scan"></div><div class="tag">F2 · bigger, pinned to the PURPLE midpoint (words symmetric)</div>
+  <div class="q split"><span class="side l">Red</span><span class="svgo big"><svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+    <defs><mask id="rF2"><rect width="100" height="100" fill="#000"/><circle cx="50" cy="50" r="43" fill="#fff"/><circle cx="50" cy="50" r="24" fill="#000"/></mask></defs>
+    <g mask="url(#rF2)"><rect width="50" height="100" fill="#ff2b40"/><rect x="50" width="50" height="100" fill="#3d7bff"/>
+    <rect x="47.6" y="5" width="4.8" height="23" fill="#fff"/><rect x="47.6" y="72" width="4.8" height="23" fill="#fff"/></g></svg></span><span class="side r">Blue?</span></div>
+  <div class="lbl">Opzione F2</div></section>
+
+<section class="opt"><div class="scan"></div><div class="tag">F3 · like F2, ring slightly smaller</div>
+  <div class="q split"><span class="side l">Red</span><span class="svgo med"><svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+    <defs><mask id="rF3"><rect width="100" height="100" fill="#000"/><circle cx="50" cy="50" r="43" fill="#fff"/><circle cx="50" cy="50" r="24" fill="#000"/></mask></defs>
+    <g mask="url(#rF3)"><rect width="50" height="100" fill="#ff2b40"/><rect x="50" width="50" height="100" fill="#3d7bff"/>
+    <rect x="47.6" y="5" width="4.8" height="23" fill="#fff"/><rect x="47.6" y="72" width="4.8" height="23" fill="#fff"/></g></svg></span><span class="side r">Blue?</span></div>
+  <div class="lbl">Opzione F3 — consigliata</div></section>
+
+<!-- ==================== alternative effects (recoloured, resized, recentred) ==================== -->
+<section class="opt"><div class="scan"></div><div class="tag">Alt 1 · ORB (curvy-swan-48) — centred on the purple</div>
+  <div class="q split"><span class="side l">Red</span><span class="slot s72"><span class="orb-container"><span class="orb"><span class="orb-inner"></span><span class="orb-inner"></span></span></span></span><span class="side r">Blue?</span></div>
+  <div class="lbl">Alternativa 1 — orb</div></section>
+
+<section class="opt"><div class="scan"></div><div class="tag">Alt 2 · BALL (tough-baboon-84) — centred, travels through the purple</div>
+  <div class="q split"><span class="side l">Red</span><span class="slot s80"><span class="ball2"></span></span><span class="side r">Blue?</span></div>
+  <div class="lbl">Alternativa 2 — palla</div>
+  <div class="note">Now pinned to the purple centre and oscillating red↔blue across it, symmetric words.</div></section>
+
+<section class="opt"><div class="scan"></div><div class="tag">Alt 3 · glow PILL spinner (lucky-falcon-75) — centred on the purple</div>
+  <div class="q split"><span class="side l">Red</span><span class="slot s68"><span class="spinner"><span class="spinner1"></span></span></span><span class="side r">Blue?</span></div>
+  <div class="lbl">Alternativa 3 — pill</div></section>
+
+<section class="opt"><div class="scan"></div><div class="tag">Alt 3b · NEW — two stacked capsules with a gap, rotating together</div>
+  <div class="q split"><span class="side l">Red</span><span class="slot s72"><span class="pills"><i class="r"></i><i class="b"></i></span></span><span class="side r">Blue?</span></div>
+  <div class="lbl">Alternativa 3b — pills</div></section>
+
+<section class="opt"><div class="scan"></div><div class="tag">Alt 3b-2 · stacked capsules — slightly smaller</div>
+  <div class="q split"><span class="side l">Red</span><span class="slot s72"><span class="pills sm"><i class="r"></i><i class="b"></i></span></span><span class="side r">Blue?</span></div>
+  <div class="lbl">Alternativa 3b-2 — pills (small)</div></section>
+
+<section class="opt"><div class="scan"></div><div class="tag">Alt 4 · DUAL RING (funny-catfish-94) — smaller, centred on the purple</div>
+  <div class="q split"><span class="side l">Red</span><span class="slot s66"><span class="dring"><span class="inner"></span></span></span><span class="side r">Blue?</span></div>
+  <div class="lbl">Alternativa 4 — doppio anello</div></section>
+
+</body></html>

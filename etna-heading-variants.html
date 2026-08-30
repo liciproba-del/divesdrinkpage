@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dives — "come l'Etna" · 3 varianti del titolo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Manrope:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --red:#ff2b40; --red-glow:#ff5470; --blue:#3d7bff; --pink:#ff5e86; --orange:#ff9a5a;
+  --disp:"Fredoka", system-ui, sans-serif; --body:"Manrope", system-ui, sans-serif;
+  /* warm etna heading gradient (no yellow, per brand) */
+  --warm:linear-gradient(92deg,#ff8a5c,#ff2b40 55%,#ff5e86);
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{font-family:var(--body);background:#0b0713;color:#fff;-webkit-font-smoothing:antialiased}
+
+/* ---- the ETNA block, replicated (warm glows + smoke-less bottle for context) ---- */
+.etna{position:relative;overflow:hidden;min-height:100svh;display:flex;flex-direction:column;justify-content:center;
+  padding:96px 24px 62px;text-align:center;
+  background:radial-gradient(66% 42% at 50% 101%, rgba(255,120,30,.4), transparent 64%),
+    radial-gradient(78% 52% at 50% 15%, rgba(255,90,60,.16), transparent 56%),
+    linear-gradient(180deg,#20101a,#12060a 55%,#0b0713)}
+.etna .wrap{position:relative;z-index:2;max-width:960px;margin:0 auto}
+.etna .big{font-family:var(--disp);font-weight:700;font-size:clamp(2rem,5.6vw,4rem);line-height:1.06;max-width:900px;margin:0 auto}
+.etna .claim{margin-top:20px;font-family:var(--disp);font-weight:600;font-size:clamp(1.2rem,2.6vw,1.9rem);color:#fff;opacity:.92}
+/* small static bottle + warm halo for block context */
+.etna-stage{position:relative;display:flex;justify-content:center;margin:44px 0 0}
+.etna-stage::before{content:"";position:absolute;bottom:-6%;left:50%;transform:translateX(-50%);width:min(48vw,340px);height:120%;z-index:-1;
+  background:radial-gradient(closest-side, rgba(255,110,40,.32), rgba(255,60,40,.08) 58%, transparent 72%);filter:blur(22px);animation:halo 3.6s ease-in-out infinite}
+.etna-bottle{height:min(38vh,340px);width:auto;display:block;transform-origin:bottom center;
+  filter:drop-shadow(0 22px 40px rgba(255,60,30,.35));animation:sway 6.5s ease-in-out infinite}
+@keyframes halo{0%,100%{opacity:.75;transform:translateX(-50%) scale(1)}50%{opacity:1;transform:translateX(-50%) scale(1.06)}}
+@keyframes sway{0%{transform:rotate(0)}20%{transform:rotate(1.6deg)}45%{transform:rotate(-.5deg)}60%{transform:rotate(-1.6deg)}85%{transform:rotate(.4deg)}100%{transform:rotate(0)}}
+
+/* corner label */
+.v-label{position:absolute;top:20px;left:22px;z-index:6;font-family:var(--body);font-weight:800;font-size:.72rem;letter-spacing:.16em;
+  text-transform:uppercase;color:#fff;background:rgba(0,0,0,.4);border:1px solid rgba(255,255,255,.18);border-radius:999px;padding:7px 14px}
+.v-note{position:absolute;top:20px;right:22px;z-index:6;font-size:.74rem;color:rgba(255,255,255,.72);font-weight:600;max-width:46%;text-align:right}
+
+/* ============================================================= */
+/* VARIANTE 1 — MELTING TEXT (Prismic), recoloured to warm no-yellow */
+/* ============================================================= */
+.melt-head{display:flex;flex-direction:column;gap:.04em;align-items:center;padding-bottom:.45em}
+.melt{position:relative;display:inline-block;background:var(--warm);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  animation:melt 3s infinite ease-in-out}
+.melt::before,.melt::after{content:attr(data-text);position:absolute;left:0;top:0;width:100%;height:100%;
+  background:var(--warm);-webkit-background-clip:text;background-clip:text;color:transparent;z-index:-1;transform-origin:top center}
+.melt::before{opacity:.5;animation:drip 3s infinite ease-in-out}
+.melt::after{filter:blur(10px);opacity:.3;animation:drip 3s infinite ease-in-out}
+@keyframes melt{0%,100%{transform:translateY(0)}50%{transform:translateY(16px)}}
+@keyframes drip{0%,100%{transform:scaleY(1);opacity:.45}50%{transform:scaleY(1.55);opacity:.7}}
+
+/* ============================================================= */
+/* VARIANTE 2 — TEXT EXPLODE (animata iMessage), ported to vanilla */
+/* ============================================================= */
+.ex-head{font-family:var(--disp);font-weight:700}
+.ex-line{display:block}
+.ex-ch{display:inline-block;background:linear-gradient(180deg,#ff8a5c,#ff2b40 62%,#ff5e86);
+  -webkit-background-clip:text;background-clip:text;color:transparent;will-change:transform,opacity}
+
+/* ============================================================= */
+/* VARIANTE 3 — JITTER TEXT (animata) */
+/* ============================================================= */
+.jit-head{display:inline-block;background:var(--warm);-webkit-background-clip:text;background-clip:text;color:transparent;
+  animation:jitter .6s infinite ease-in-out alternate}
+@keyframes jitter{
+  0%{transform:translate(0,1.5px) rotate(.5deg)}
+  15%{transform:translate(-1px,1px) rotate(-1.5deg)}
+  30%{transform:translate(1.5px,-1px) rotate(1deg)}
+  45%{transform:translate(-1.5px,1.5px) rotate(-1.5deg)}
+  60%{transform:translate(1px,-1.5px) rotate(1deg)}
+  75%{transform:translate(-1px,1px) rotate(-1deg)}
+  90%{transform:translate(.5px,-.5px) rotate(1deg)}
+  100%{transform:translate(0,0) rotate(0)}}
+
+@media(prefers-reduced-motion:reduce){
+  .melt,.melt::before,.melt::after,.etna-bottle,.etna-stage::before,.jit-head{animation:none}
+}
+</style>
+</head>
+<body>
+
+<!-- ===================== VARIANTE 1 — MELTING ===================== -->
+<section class="etna">
+  <span class="v-label">Titolo · variante 1 — melting</span>
+  <span class="v-note">Testo che "cola" (Prismic melting), ricolorato caldo — senza giallo</span>
+  <div class="wrap">
+    <h2 class="big melt-head">
+      <span class="melt" data-text="L'esplosione del gusto">L'esplosione del gusto</span>
+      <span class="melt" data-text="in bocca, come l'Etna">in bocca, come l'Etna</span>
+    </h2>
+    <p class="claim">Il gusto erutta.</p>
+    <div class="etna-stage"><img class="etna-bottle" src="red-nocap.png" alt="Dives — Etna"></div>
+  </div>
+</section>
+
+<!-- ===================== VARIANTE 2 — EXPLODE ===================== -->
+<section class="etna">
+  <span class="v-label">Titolo · variante 2 — esplosione</span>
+  <span class="v-note">Le lettere si stringono, tremano ed esplodono (animata iMessage), in loop</span>
+  <div class="wrap">
+    <h2 class="big ex-head" id="exHead">L'esplosione del gusto<br>in bocca, come l'Etna</h2>
+    <p class="claim">Il gusto erutta.</p>
+    <div class="etna-stage"><img class="etna-bottle" src="red-nocap.png" alt="Dives — Etna"></div>
+  </div>
+</section>
+
+<!-- ===================== VARIANTE 3 — JITTER ===================== -->
+<section class="etna">
+  <span class="v-label">Titolo · variante 3 — jitter</span>
+  <span class="v-note">Vibrazione continua e leggera del titolo (animata jitter)</span>
+  <div class="wrap">
+    <h2 class="big"><span class="jit-head">L'esplosione del gusto<br>in bocca, come l'Etna</span></h2>
+    <p class="claim">Il gusto erutta.</p>
+    <div class="etna-stage"><img class="etna-bottle" src="red-nocap.png" alt="Dives — Etna"></div>
+  </div>
+</section>
+
+<script>
+(function(){
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+  var head = document.getElementById('exHead');
+  if(!head) return;
+
+  // split "line<br>line" into per-character spans, preserving line breaks
+  var lines = head.innerHTML.split(/<br\s*\/?>/i);
+  head.innerHTML = '';
+  var chars = [];
+  lines.forEach(function(line, li){
+    var tmp = document.createElement('div'); tmp.innerHTML = line;
+    var text = tmp.textContent;
+    var wrap = document.createElement('span'); wrap.className = 'ex-line';
+    Array.from(text).forEach(function(ch){
+      var s = document.createElement('span'); s.className = 'ex-ch';
+      s.textContent = (ch === ' ') ? ' ' : ch;
+      wrap.appendChild(s); chars.push(s);
+    });
+    head.appendChild(wrap);
+  });
+
+  if(reduce) return;
+
+  function anim(el, frames, opts){ return el.animate(frames, opts).finished; }
+  var N = chars.length;
+
+  async function cycle(){
+    try{
+      // 1) shrink whole heading slightly
+      await anim(head, [{transform:'scale(1)'},{transform:'scale(.84)'}],
+                 {duration:700, easing:'ease-out', fill:'forwards'});
+      // 2) jitter every character
+      await Promise.all(chars.map(function(c){
+        return anim(c, [
+          {transform:'translate(0,0)'},{transform:'translate(-3px,-2px)'},
+          {transform:'translate(3px,2px)'},{transform:'translate(-3px,2px)'},
+          {transform:'translate(0,0)'}], {duration:460, easing:'ease-in-out'});
+      }));
+      // 3) explode outward — each char flies with random vector/rotation/scale
+      await Promise.all(chars.map(function(c,i){
+        var dir = Math.random() > 0.5 ? -1 : 1;
+        var x = (Math.random() * 10 * N) * dir * 0.5;
+        var ang = (N>1 ? (i/(N-1)) : 0.5) * Math.PI;
+        var y = -(N*4) * Math.sin(ang) * Math.random();
+        var rot = Math.random() * 360 * dir;
+        var sc = 1 + Math.random()*1.4;
+        return anim(c, [
+          {transform:'translate(0,0) rotate(0) scale(1)', opacity:1, offset:0},
+          {transform:'translate('+(x*0.7)+'px,'+y+'px) rotate('+(rot*0.7)+'deg) scale(1.18)', opacity:0.55, offset:0.6},
+          {transform:'translate('+x+'px,'+(y*0.2+10)+'px) rotate('+rot+'deg) scale('+sc+')', opacity:0, offset:1}
+        ], {duration:1150, easing:'ease-in', fill:'forwards'});
+      }));
+      // 4) reset instantly (hidden), then fade characters back in
+      head.style.transform = 'scale(1)';
+      chars.forEach(function(c){ c.style.transform='none'; c.style.opacity='0'; c.getAnimations().forEach(function(a){a.cancel();}); });
+      await Promise.all(chars.map(function(c){
+        return anim(c, [{opacity:0},{opacity:1}], {duration:650, delay:300, easing:'ease-out', fill:'forwards'});
+      }));
+      chars.forEach(function(c){ c.style.opacity=''; });
+    }catch(e){}
+    requestAnimationFrame(cycle);
+  }
+  // small initial delay so the page settles
+  setTimeout(function(){ requestAnimationFrame(cycle); }, 500);
+})();
+</script>
+</body>
+</html>

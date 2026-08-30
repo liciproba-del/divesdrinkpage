@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dives — Scroll Sip</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --red:#ff2b40;
+    --blue:#3d7bff;
+    --violet:#7b2ff7;
+    --ink:#eaf1ff;
+    --bg0:#050912;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    background:var(--bg0);
+    color:var(--ink);
+    font-family:'Manrope',system-ui,sans-serif;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+
+  /* ---------- intro ---------- */
+  .intro{
+    height:100svh;
+    display:flex;flex-direction:column;
+    align-items:center;justify-content:center;
+    text-align:center;gap:1.4rem;padding:2rem;
+    background:
+      radial-gradient(90% 70% at 30% 0%, rgba(255,43,64,.20) 0%, transparent 55%),
+      radial-gradient(90% 70% at 70% 0%, rgba(61,123,255,.20) 0%, transparent 55%),
+      radial-gradient(100% 70% at 50% 100%, #0a1430 0%, var(--bg0) 60%);
+  }
+  .lab{
+    font-weight:600;font-size:.72rem;letter-spacing:.32em;
+    text-transform:uppercase;color:rgba(180,195,235,.7);
+  }
+  .intro h1{
+    font-family:'Fredoka';font-weight:700;
+    font-size:clamp(3rem,11vw,7rem);line-height:.92;letter-spacing:-.01em;
+    background:linear-gradient(100deg,#ff6b7a,#eaf1ff 50%,#6f9dff);
+    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+  }
+  .intro p{max-width:34ch;color:rgba(220,232,255,.72);font-size:clamp(1rem,2.4vw,1.2rem);line-height:1.5}
+  .cue{margin-top:1rem;display:flex;flex-direction:column;align-items:center;gap:.5rem;
+    color:rgba(200,210,240,.85);font-size:.8rem;letter-spacing:.14em;text-transform:uppercase}
+  .cue .arrow{width:26px;height:26px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;
+    transform:rotate(45deg);animation:bob 1.8s ease-in-out infinite}
+  @keyframes bob{0%,100%{transform:rotate(45deg) translate(0,0);opacity:.5}50%{transform:rotate(45deg) translate(4px,4px);opacity:1}}
+
+  /* ---------- scrolly scrub ---------- */
+  .scrolly{position:relative;height:520vh;background:var(--bg0)}
+  .stage{position:sticky;top:0;height:100svh;overflow:hidden;background:#05101f}
+  .stage video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+
+  /* per-variant framing (keep the subject in shot) */
+  .blue .stage video{object-position:72% 50%}   /* man on the right  */
+  .red  .stage video{object-position:28% 50%}    /* woman on the left */
+  .red  .stage{background:#160208}
+
+  /* directional scrim so the copy stays legible over the clean side */
+  .scrim{position:absolute;inset:0;pointer-events:none}
+  .blue .scrim{background:
+    linear-gradient(90deg, rgba(4,9,20,.86) 0%, rgba(4,9,20,.45) 34%, rgba(4,9,20,0) 60%),
+    linear-gradient(0deg, rgba(4,9,20,.55) 0%, transparent 26%)}
+  .red .scrim{background:
+    linear-gradient(270deg, rgba(14,2,8,.86) 0%, rgba(14,2,8,.42) 34%, rgba(14,2,8,0) 60%),
+    linear-gradient(0deg, rgba(14,2,8,.55) 0%, transparent 26%)}
+
+  .overlay{position:absolute;inset:0;display:flex;align-items:center;
+    padding:clamp(1.4rem,6vw,6rem);pointer-events:none}
+  .blue .overlay{justify-content:flex-start;text-align:left}
+  .red  .overlay{justify-content:flex-end;text-align:right}
+  .copy{max-width:min(46ch,52vw)}
+  .copy .eyebrow{font-weight:600;font-size:clamp(.72rem,1.4vw,.9rem);
+    letter-spacing:.3em;text-transform:uppercase;margin-bottom:1rem}
+  .blue .eyebrow{color:var(--blue)} .red .eyebrow{color:#ff5b6e}
+  .copy h2{font-family:'Fredoka';font-weight:700;font-size:clamp(2.4rem,7vw,5.4rem);
+    line-height:.98;letter-spacing:-.01em;text-shadow:0 6px 40px rgba(0,6,20,.6)}
+  .blue h2 .b{color:#8fb6ff} .red h2 .b{color:#ff8f9c}
+  .copy .sub{margin-top:1.2rem;font-size:clamp(1rem,2.2vw,1.3rem);line-height:1.5;
+    color:rgba(230,235,245,.85);max-width:30ch}
+  .red .copy .sub, .red .copy{margin-left:auto}
+
+  /* ---------- outro ---------- */
+  .outro{min-height:100svh;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    text-align:center;gap:1rem;padding:3rem 2rem;
+    background:
+      radial-gradient(80% 60% at 30% 0%, rgba(255,43,64,.12), transparent 60%),
+      radial-gradient(80% 60% at 70% 0%, rgba(61,123,255,.12), transparent 60%),
+      radial-gradient(100% 80% at 50% 30%, #0a1430 0%, var(--bg0) 60%)}
+  .outro h3{font-family:'Fredoka';font-weight:700;font-size:clamp(2rem,6vw,4rem);line-height:1}
+  .outro p{color:rgba(220,232,255,.66);max-width:36ch;line-height:1.5}
+
+  @media (prefers-reduced-motion:reduce){
+    .scrolly{height:100svh}
+    .cue .arrow{animation:none}
+  }
+
+  .badge{position:fixed;top:14px;right:14px;z-index:50;font-weight:600;font-size:.66rem;
+    letter-spacing:.18em;text-transform:uppercase;color:rgba(200,210,240,.6);
+    border:1px solid rgba(160,170,210,.25);border-radius:99px;padding:.4rem .8rem;
+    background:rgba(6,12,26,.5);backdrop-filter:blur(6px);pointer-events:none}
+</style>
+</head>
+<body>
+
+  <div class="badge">prototipo · scroll-sip</div>
+
+  <!-- intro -->
+  <section class="intro">
+    <span class="lab">Dives · Red o Blue</span>
+    <h1>Un sorso<br>al tuo ritmo</h1>
+    <p>Scorri la pagina e il sorso segue il tuo dito. Fermati, torna su, riparti quando vuoi</p>
+    <div class="cue"><span>Scorri</span><span class="arrow"></span></div>
+  </section>
+
+  <!-- RED · girl -->
+  <section class="scrolly red">
+    <div class="stage">
+      <video class="sip" muted playsinline preload="auto" disablepictureinpicture>
+        <source src="GirlSipScroll-scrub.mp4" type="video/mp4">
+        <source src="GirlSipScroll.mp4" type="video/mp4">
+      </video>
+      <div class="scrim"></div>
+      <div class="overlay">
+        <div class="copy">
+          <div class="eyebrow">Red · Nero d'Avola</div>
+          <h2>Red, quando<br>il sole <span class="b">scende</span></h2>
+          <p class="sub">Rosé di Mazara, note di frutti rossi. Per chi beve diverso</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BLUE · guy -->
+  <section class="scrolly blue">
+    <div class="stage">
+      <video class="sip" muted playsinline preload="auto" disablepictureinpicture>
+        <source src="GuySipScroll-scrub.mp4" type="video/mp4">
+        <source src="GuySipScroll.mp4" type="video/mp4">
+      </video>
+      <div class="scrim"></div>
+      <div class="overlay">
+        <div class="copy">
+          <div class="eyebrow">Blue · Grillo</div>
+          <h2>Blue, quando<br>la notte <span class="b">sale</span></h2>
+          <p class="sub">Note tropicali, fiori d'arancio. Per chi beve diverso</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- outro -->
+  <section class="outro">
+    <h3>Bevi meglio, non di più</h3>
+    <p>Terra Dives — un vero drink italiano, 6,5% vol.</p>
+  </section>
+
+<script>
+(function(){
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var sections = Array.prototype.slice.call(document.querySelectorAll('.scrolly'));
+
+  if(reduce){
+    sections.forEach(function(sec){
+      var v = sec.querySelector('video');
+      v.loop = true; v.setAttribute('autoplay','');
+      v.addEventListener('canplay', function(){ v.play().catch(function(){}); }, {once:true});
+    });
+    return;
+  }
+
+  var ctrls = sections.map(function(sec){
+    var v = sec.querySelector('video');
+    var c = { sec:sec, v:v, duration:0, target:0, current:0, seeking:false, pending:false };
+    v.addEventListener('loadedmetadata', function(){
+      c.duration = v.duration || 0;
+      try{ v.currentTime = 0.001; }catch(e){}
+    });
+    v.addEventListener('seeked', function(){
+      c.seeking = false;
+      if(c.pending){ c.pending = false; applySeek(c); }
+    });
+    if(v.readyState >= 1) c.duration = v.duration;
+    return c;
+  });
+
+  function progress(sec){
+    var rect = sec.getBoundingClientRect();
+    var scrollable = sec.offsetHeight - window.innerHeight;
+    if(scrollable <= 0) return 0;
+    return Math.max(0, Math.min(1, (-rect.top) / scrollable));
+  }
+
+  function onScroll(){
+    ctrls.forEach(function(c){
+      if(c.duration) c.target = progress(c.sec) * c.duration;
+    });
+  }
+
+  function applySeek(c){
+    if(!c.duration) return;
+    c.current += (c.target - c.current) * 0.18;      // buttery ease
+    if(Math.abs(c.target - c.current) < 0.004) c.current = c.target;
+    var t = Math.max(0, Math.min(c.duration - 0.001, c.current));
+    if(c.seeking){ c.pending = true; return; }
+    if(Math.abs(t - c.v.currentTime) > 0.003){
+      c.seeking = true;
+      try{ c.v.currentTime = t; }catch(e){ c.seeking = false; }
+    }
+  }
+
+  function raf(){ ctrls.forEach(applySeek); requestAnimationFrame(raf); }
+
+  window.addEventListener('scroll', onScroll, {passive:true});
+  window.addEventListener('resize', onScroll);
+  onScroll();
+  requestAnimationFrame(raf);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dives — Etna: opzioni fumo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Manrope:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--red:#ff2b40;--blue:#3d7bff;--disp:"Fredoka",system-ui,sans-serif;--body:"Manrope",system-ui,sans-serif}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--body);background:#0b0713;color:#fff;-webkit-font-smoothing:antialiased}
+img{display:block;max-width:100%}
+.wrap{max-width:1100px;margin:0 auto;padding:0 24px;position:relative;z-index:2}
+.pagehead{text-align:center;padding:46px 24px 6px}
+.pagehead h1{font-family:var(--disp);font-weight:700;font-size:clamp(1.7rem,4vw,2.6rem)}
+.pagehead p{margin:10px auto 0;max-width:660px;color:rgba(255,255,255,.75);font-weight:500;line-height:1.5}
+.optlabel{max-width:1100px;margin:30px auto 0;padding:0 24px;display:flex;align-items:center;gap:14px}
+.optlabel .tag{font-family:var(--disp);font-weight:700;font-size:1.15rem;background:linear-gradient(90deg,#ff8a5c,#ff2b40 60%,#ff5e86);-webkit-background-clip:text;background-clip:text;color:transparent;white-space:nowrap}
+.optlabel .desc{color:rgba(255,255,255,.7);font-weight:500;font-size:.95rem}
+.optlabel .line{flex:1;height:1px;background:rgba(255,255,255,.14)}
+.etna{position:relative;overflow:hidden;padding:26px 0 54px;text-align:center;
+  background:radial-gradient(66% 44% at 50% 101%, rgba(255,120,30,.46), transparent 64%),
+    radial-gradient(80% 60% at 50% 0%, rgba(255,90,60,.26), transparent 60%),
+    linear-gradient(180deg,#1a0a12,#12060a 60%,#0b0713)}
+.etna .claim{font-family:var(--disp);font-weight:600;font-size:clamp(1.1rem,2.6vw,1.6rem);color:#fff}
+.etna-stage{position:relative;display:flex;justify-content:center;margin:150px 0 8px}
+.etna-stage::before{content:"";position:absolute;bottom:-10%;left:50%;transform:translateX(-50%);width:min(56vw,420px);height:116%;z-index:-1;
+  background:radial-gradient(closest-side, rgba(255,110,40,.3), rgba(255,60,40,.08) 58%, transparent 72%);filter:blur(22px);animation:etnaPulse 3.6s ease-in-out infinite}
+.etna-neck{position:absolute;left:50%;top:0;width:0;height:0;z-index:3;pointer-events:none}
+.etna-mist{position:absolute;left:50%;top:0;width:0;height:0;z-index:2;pointer-events:none}
+.etna-gif{position:absolute;left:50%;top:0;width:0;height:0;z-index:2;pointer-events:none}
+.etna-bottle{position:relative;z-index:1;height:min(52vh,440px);width:auto;display:block;transform-origin:bottom center;
+  filter:drop-shadow(0 26px 46px rgba(255,60,30,.35));animation:etnaSway 6.5s ease-in-out infinite}
+@keyframes etnaSway{0%{transform:rotate(0)}20%{transform:rotate(1.8deg)}45%{transform:rotate(-.6deg)}60%{transform:rotate(-1.8deg)}85%{transform:rotate(.5deg)}100%{transform:rotate(0)}}
+@keyframes etnaPulse{0%,100%{opacity:.7;transform:translateX(-50%) scale(1)}50%{opacity:1;transform:translateX(-50%) scale(1.06)}}
+.etna-bubble{position:absolute;left:0;bottom:0;border-radius:50%;
+  background:radial-gradient(circle at 42% 34%,#ffdcb4,#e0975a 58%,#b26a3c);opacity:0;
+  box-shadow:0 0 8px 1px rgba(220,120,60,.34);animation:etnaRise ease-out infinite;will-change:transform,opacity}
+@keyframes etnaRise{0%{transform:translate(-50%,0) scale(.75);opacity:0}14%{opacity:.6}70%{opacity:.4}100%{transform:translate(calc(-50% + var(--ex,0px)),var(--rise,-74vh)) scale(.34);opacity:0}}
+/* OPTION A — refined CSS smoke */
+.etna-smoke{position:absolute;left:0;bottom:0;border-radius:50%;
+  background:radial-gradient(circle at 50% 86%, rgba(255,251,247,.52), rgba(242,229,220,.22) 46%, transparent 70%);
+  filter:blur(8px);opacity:0;mix-blend-mode:screen;transform:translate(-50%,0) scale(.2);
+  animation:etnaSmoke linear infinite;will-change:transform,opacity}
+@keyframes etnaSmoke{0%{opacity:0;transform:translate(-50%,0) scale(.2)}8%{opacity:.7}18%{opacity:.82}55%{opacity:.44}100%{opacity:0;transform:translate(calc(-50% + var(--mx,0px)),var(--mrise,-46vh)) scale(1.95)}}
+/* OPTION B — realistic GIF smoke. The GIF plume sits in the lower-left of its frame;
+   object-position pushes the plume column to horizontal centre, height crops the empty top,
+   and the box is anchored so the plume BASE meets the neck and rises upward. */
+.smoke-gif{position:absolute;left:0;bottom:0;height:var(--sh);aspect-ratio:.62/1;width:auto;
+  object-fit:cover;object-position:50% 100%;max-width:none;pointer-events:none;transform-origin:bottom center}
+.smoke-gif.main{--sh:min(74vh,500px);transform:translateX(-50%);opacity:.95;filter:brightness(1.14) contrast(1.06);animation:gifSwayA 9s ease-in-out infinite}
+.smoke-gif.haze{--sh:min(88vh,600px);transform:translateX(-50%);opacity:.3;filter:blur(7px) brightness(1.06);animation:gifSwayB 12s ease-in-out infinite}
+@keyframes gifSwayA{0%,100%{transform:translateX(-50%) rotate(-1.3deg)}50%{transform:translateX(-51.5%) rotate(1.3deg)}}
+@keyframes gifSwayB{0%,100%{transform:translateX(-48.5%) rotate(1.5deg) scale(1.02)}50%{transform:translateX(-51.5%) rotate(-1.5deg) scale(1.06)}}
+@media(prefers-reduced-motion:reduce){.etna-bottle,.etna-stage::before,.etna-bubble,.etna-smoke,.smoke-gif{animation:none}.etna-smoke{opacity:0}}
+.note{max-width:1100px;margin:6px auto 60px;padding:0 24px;color:rgba(255,255,255,.6);font-size:.85rem;text-align:center}
+</style>
+</head>
+<body>
+<div class="pagehead">
+  <h1>Etna — due versioni del fumo dalla bottiglia</h1>
+  <p>In entrambe il fumo esce dal collo della bottiglia. Scegli quale preferisci: fumo CSS (leggero, generato dal codice) oppure fumo realistico (GIF).</p>
+</div>
+
+<div class="optlabel"><span class="tag">Opzione A</span><span class="desc">Fumo CSS — morbido e stilizzato</span><div class="line"></div></div>
+<section class="etna" id="etnaA">
+  <div class="wrap"><div class="claim">«L'esplosione del gusto in bocca, come l'Etna.»</div></div>
+  <div class="etna-stage">
+    <img class="etna-bottle" src="red-nocap.png" alt="Dives Red">
+    <div class="etna-mist" id="mistA"></div>
+    <div class="etna-neck" id="neckA"></div>
+  </div>
+</section>
+
+<div class="optlabel"><span class="tag">Opzione B</span><span class="desc">Fumo realistico — GIF fusa con lo sfondo</span><div class="line"></div></div>
+<section class="etna" id="etnaB">
+  <div class="wrap"><div class="claim">«L'esplosione del gusto in bocca, come l'Etna.»</div></div>
+  <div class="etna-stage">
+    <img class="etna-bottle" src="red-nocap.png" alt="Dives Red">
+    <div class="etna-gif" id="gifB">
+      <img class="smoke-gif haze" src="etna-smoke.webp" alt="">
+      <img class="smoke-gif main" src="etna-smoke.webp" alt="">
+    </div>
+    <div class="etna-neck" id="neckB"></div>
+  </div>
+</section>
+<p class="note">Nella pagina live la GIF sarà un file separato accanto all'HTML, come le altre immagini.</p>
+
+<script>
+function embers(box){ if(!box)return;
+  for(let i=0;i<28;i++){const b=document.createElement('span');b.className='etna-bubble';
+    const sizes=[6,8,10,12,14];const s=sizes[(i*3)%sizes.length];b.style.width=s+'px';b.style.height=s+'px';
+    b.style.left=(-150+((i*97)%300))+'px';
+    b.style.setProperty('--ex',(-52+((i*53)%104))+'px');
+    b.style.setProperty('--rise',(-(58+((i*17)%24)))+'vh');
+    b.style.animationDuration=(4.6+((i%6)*0.9))+'s';b.style.animationDelay=(-(i*0.4))+'s';
+    box.appendChild(b);}
+}
+function place(sec, els, factor){
+  const bottle=sec.querySelector('.etna-bottle'), stage=sec.querySelector('.etna-stage');
+  if(!bottle||!stage)return; const br=bottle.getBoundingClientRect(), sr=stage.getBoundingClientRect();
+  if(!br.height)return; const cx=(br.left+br.width/2)-sr.left; const y=(br.top-sr.top)+br.height*factor;
+  els.forEach(el=>{if(el){el.style.left=cx+'px';el.style.top=y+'px';}});
+}
+(function(){const sec=document.getElementById('etnaA');const neck=document.getElementById('neckA');const mist=document.getElementById('mistA');
+  embers(neck);
+  for(let i=0;i<16;i++){const m=document.createElement('span');m.className='etna-smoke';
+    const w=32+((i*19)%40);m.style.width=w+'px';m.style.height=w+'px';
+    m.style.setProperty('--mx',(-12+((i*17)%24))+'px');
+    m.style.setProperty('--mrise',(-(40+((i*13)%22)))+'vh');
+    m.style.animationDuration=(8+((i%5)*1.4))+'s';m.style.animationDelay=(-(i*0.9))+'s';
+    mist.appendChild(m);}
+  const upd=()=>place(sec,[neck,mist],0.065); upd(); addEventListener('resize',upd,{passive:true});
+  window.addEventListener('load',upd);
+})();
+(function(){const sec=document.getElementById('etnaB');const neck=document.getElementById('neckB');const gif=document.getElementById('gifB');
+  embers(neck);
+  const upd=()=>place(sec,[neck,gif],0.065); upd(); addEventListener('resize',upd,{passive:true});
+  window.addEventListener('load',upd);
+})();
+</script>
+</body>
+</html>
