@@ -612,9 +612,18 @@ img{max-width:100%;display:block}
 /* (6a) HERO on short screens: hide the SCORRI hint (it collided with the
    centred copy) and trim the logo a touch. */
 @media(max-height:840px){
-  .hero .scroll-hint{display:none}
   .mark{height:clamp(110px,22vw,290px)}
 }
+/* (6a·rev S21) HERO "Scorri" hint: was hidden on short screens because the
+   absolutely-pinned hint collided with the centred copy. Instead of hiding it,
+   drop it INTO the flex flow at the very bottom of the hero (margin-top:auto
+   pushes it to the end of the block) on short/handheld screens — so it always
+   shows and can never overlap the copy or jump above it. */
+@media (max-height:840px), (max-width:768px){
+  .hero .scroll-hint{position:static;bottom:auto;left:auto;transform:none;
+    margin:24px auto 0;margin-top:auto;animation:bobflow 1.8s ease-in-out infinite}
+}
+@keyframes bobflow{0%,100%{transform:translateY(0)}50%{transform:translateY(7px)}}
 
 /* (6b) DIVE block on laptops (≤1400w): drop the fixed aspect-ratio so the
    section grows to fit the heading + lead instead of clipping them. */
@@ -627,9 +636,32 @@ img{max-width:100%;display:block}
   .finale{padding-top:66px;padding-bottom:28px}
   .finale .footer{margin-top:30px}
 }
+
+/* ============ PAGE LOADER — Dual Ring (Alt 4 from rb-options) ============ */
+#page-loader{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;
+  background:#0b0713;transition:opacity .55s ease,visibility .55s ease}
+#page-loader.dl-hidden{opacity:0;visibility:hidden;pointer-events:none}
+#page-loader .dl-box{display:flex;flex-direction:column;align-items:center;gap:24px}
+#page-loader .dl-ring{font-size:64px;width:1em;height:1em;border:.09em solid transparent;
+  border-top-color:var(--blue);border-radius:50%;display:flex;align-items:center;justify-content:center;
+  animation:dlspin 1s linear infinite;filter:drop-shadow(0 0 10px rgba(61,123,255,.35))}
+#page-loader .dl-inner{width:.72em;height:.72em;border:.09em solid transparent;border-top-color:var(--red);
+  border-radius:50%;animation:dlspin 1s linear infinite;filter:drop-shadow(0 0 8px rgba(255,43,64,.35))}
+#page-loader .dl-word{font-family:var(--disp);font-weight:700;text-transform:uppercase;letter-spacing:.34em;
+  padding-left:.34em;font-size:.82rem;color:#fff;text-shadow:0 0 18px rgba(255,255,255,.25)}
+@keyframes dlspin{to{transform:rotate(360deg)}}
+@media(prefers-reduced-motion:reduce){#page-loader .dl-ring,#page-loader .dl-inner{animation:none}}
 </style>
 </head>
 <body>
+
+<!-- ============ PAGE LOADER (Dual Ring · Alt 4) ============ -->
+<div id="page-loader" aria-hidden="true">
+  <div class="dl-box">
+    <span class="dl-ring"><span class="dl-inner"></span></span>
+    <div class="dl-word">Loading</div>
+  </div>
+</div>
 
 <header class="topbar">
   <div class="brand"><span class="a">Di</span><span class="b">ves</span></div>
@@ -919,7 +951,7 @@ img{max-width:100%;display:block}
   <div class="wrap">
     <div class="dive-in">
       <h2 class="rise d1">Dive<br>into<br>L<span class="heart-o"><input type="checkbox" class="checkbox" id="dive-heart" aria-label="Metti mi piace"><span class="svg-container"><svg viewBox="0 0 24 24" class="svg-outline" xmlns="http://www.w3.org/2000/svg"><path d="M17.5,1.917a6.4,6.4,0,0,0-5.5,3.3,6.4,6.4,0,0,0-5.5-3.3A6.8,6.8,0,0,0,0,8.967c0,4.547,4.786,9.513,8.8,12.88a4.974,4.974,0,0,0,6.4,0C19.214,18.48,24,13.514,24,8.967A6.8,6.8,0,0,0,17.5,1.917Zm-3.585,18.4a2.973,2.973,0,0,1-3.83,0C4.947,16.006,2,11.87,2,8.967a4.8,4.8,0,0,1,4.5-5.05A4.8,4.8,0,0,1,11,8.967a1,1,0,0,0,2,0,4.8,4.8,0,0,1,4.5-5.05A4.8,4.8,0,0,1,22,8.967C22,11.87,19.053,16.006,13.915,20.313Z"></path></svg><svg viewBox="0 0 24 24" class="svg-filled" xmlns="http://www.w3.org/2000/svg"><path d="M17.5,1.917a6.4,6.4,0,0,0-5.5,3.3,6.4,6.4,0,0,0-5.5-3.3A6.8,6.8,0,0,0,0,8.967c0,4.547,4.786,9.513,8.8,12.88a4.974,4.974,0,0,0,6.4,0C19.214,18.48,24,13.514,24,8.967A6.8,6.8,0,0,0,17.5,1.917Z"></path></svg><svg viewBox="0 0 100 100" class="svg-celebrate" xmlns="http://www.w3.org/2000/svg"><polygon points="10,10 20,20"></polygon><polygon points="10,50 20,50"></polygon><polygon points="20,80 30,70"></polygon><polygon points="90,10 80,20"></polygon><polygon points="90,50 80,50"></polygon><polygon points="80,80 70,70"></polygon></svg></span></span>ve<br>with<br><span class="flow">Dives</span></h2>
-      <p class="lead rise d2">Tuffati.<br>L'estate siciliana<br>ti aspetta<br>dentro la bottiglia</p>
+      <p class="lead rise d2">Tuffati.<br>L'estate siciliana<br>ti&nbsp;aspetta<br>dentro la&nbsp;bottiglia</p>
     </div>
   </div>
 </section>
@@ -1278,6 +1310,18 @@ img{max-width:100%;display:block}
     var t; window.addEventListener('resize',function(){clearTimeout(t);t=setTimeout(function(){if(!busy)map();},200);});
   }
   if(document.fonts&&document.fonts.ready){document.fonts.ready.then(function(){setTimeout(start,60);});} else {setTimeout(start,200);}
+})();
+</script>
+<script>
+/* Page loader (Dual Ring): hide once the page has fully loaded. */
+(function(){
+  var pl=document.getElementById('page-loader'); if(!pl) return;
+  var done=false;
+  function hide(){ if(done) return; done=true; pl.classList.add('dl-hidden');
+    setTimeout(function(){ pl.style.display='none'; },650); }
+  if(document.readyState==='complete'){ setTimeout(hide,250); }
+  else { window.addEventListener('load',function(){ setTimeout(hide,250); }); }
+  setTimeout(hide,7000); /* safety fallback so it can never stick */
 })();
 </script>
 </body>
