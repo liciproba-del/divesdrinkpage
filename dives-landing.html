@@ -1067,7 +1067,12 @@ img{max-width:100%;display:block}
   }
   stage._play=play; stage.style.cursor='pointer'; stage.title='Clicca per rigiocare';
   stage.addEventListener('click',play);
-  if(document.fonts&&document.fonts.ready){document.fonts.ready.then(function(){setTimeout(play,560);});} else {setTimeout(play,760);}
+  /* S22: don't burn the intro behind the page-loader. Expose _start(); the
+     loader calls it as it fades away. With no loader, start on our own. */
+  stage._start=function(){ if(stage._started) return; stage._started=true;
+    word.style.transition='none'; word.style.opacity='0'; void stage.offsetWidth;
+    if(document.fonts&&document.fonts.ready){document.fonts.ready.then(function(){setTimeout(play,150);});} else {setTimeout(play,300);} };
+  if(!document.getElementById('page-loader')){ stage._start(); }
 })();
 (function(){
   const io=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{threshold:.16,rootMargin:'0px 0px -8% 0px'});
@@ -1317,7 +1322,10 @@ img{max-width:100%;display:block}
 (function(){
   var pl=document.getElementById('page-loader'); if(!pl) return;
   var done=false;
-  function hide(){ if(done) return; done=true; pl.classList.add('dl-hidden');
+  function hide(){ if(done) return; done=true;
+    var hero=document.getElementById('heroLogo');   /* start the hero intro AS the loader fades, so it isn't wasted behind it */
+    if(hero&&hero._start){ hero._start(); }
+    pl.classList.add('dl-hidden');
     setTimeout(function(){ pl.style.display='none'; },650); }
   if(document.readyState==='complete'){ setTimeout(hide,250); }
   else { window.addEventListener('load',function(){ setTimeout(hide,250); }); }
