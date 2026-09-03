@@ -164,13 +164,23 @@
 <script>
 (function(){
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var isIOS = /iP(hone|od|ad)/.test(navigator.userAgent) ||
+              (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1); // iPadOS reports as Mac
   var sections = Array.prototype.slice.call(document.querySelectorAll('.scrolly'));
 
-  if(reduce){
+  // iOS/WebKit does NOT paint a <video> frame from programmatic currentTime seeking
+  // during scroll (the element stays blank until .play() runs), so scroll-scrubbing
+  // shows nothing there. On iOS (and for reduced-motion) fall back to a smooth muted
+  // autoplay loop so the video is always visible and alive.
+  if(reduce || isIOS){
     sections.forEach(function(sec){
       var v = sec.querySelector('video');
-      v.loop = true; v.setAttribute('autoplay','');
-      v.addEventListener('canplay', function(){ v.play().catch(function(){}); }, {once:true});
+      v.loop = true; v.muted = true; v.setAttribute('playsinline',''); v.setAttribute('autoplay','');
+      var kick = function(){ var pr = v.play(); if(pr && pr.catch) pr.catch(function(){}); };
+      if(v.readyState >= 2) kick(); else v.addEventListener('canplay', kick, {once:true});
+      // iOS sometimes needs play() retried once the video scrolls into view
+      var io = new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting) kick(); }); }, {threshold:0.1});
+      io.observe(v);
     });
     return;
   }
@@ -181,8 +191,12 @@
     v.addEventListener('loadedmetadata', function(){
       c.duration = v.duration || 0;
       try{ v.currentTime = 0.001; }catch(e){}
+      // warm the decoder once so the FIRST scroll isn't cold/janky (Android)
+      var warm = function(){ var pr = v.play(); if(pr && pr.then) pr.then(function(){ v.pause(); try{ v.currentTime = 0.001; }catch(e){} }).catch(function(){}); };
+      if(v.readyState >= 3) warm(); else v.addEventListener('canplaythrough', warm, {once:true});
     });
     v.addEventListener('seeked', function(){
+      clearTimeout(c.stuck);
       c.seeking = false;
       if(c.pending){ c.pending = false; applySeek(c); }
     });
@@ -211,6 +225,8 @@
     if(c.seeking){ c.pending = true; return; }
     if(Math.abs(t - c.v.currentTime) > 0.003){
       c.seeking = true;
+      clearTimeout(c.stuck);
+      c.stuck = setTimeout(function(){ c.seeking = false; }, 250); // never latch if 'seeked' is dropped
       try{ c.v.currentTime = t; }catch(e){ c.seeking = false; }
     }
   }
