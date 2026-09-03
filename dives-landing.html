@@ -81,6 +81,7 @@ img{max-width:100%;display:block}
 
 .hero-sub{position:relative;z-index:2;margin-top:8px}
 .hero-sub .be{font-family:var(--disp);font-weight:700;font-size:clamp(1.9rem,5vw,3rem);color:#fff}
+.hero .kw{display:inline-block;white-space:nowrap}  /* keep a phrase together, break only BETWEEN phrases (S23) */
 .be .cr{color:var(--red)} .be .cb{color:var(--blue)} .be .cw{color:#fff}
 .be .ki{margin-right:.06em} /* nudge ONLY the I→V pair, natural spacing elsewhere */
 .hero-lead{position:relative;z-index:2;max-width:600px;margin:22px auto 0;font-size:clamp(1.02rem,1.5vw,1.28rem);font-weight:600;line-height:1.55;color:#fff}
@@ -319,6 +320,7 @@ img{max-width:100%;display:block}
 .etna .big{font-family:var(--disp);font-weight:700;font-size:clamp(2rem,5.4vw,3.8rem);line-height:1.2;padding-bottom:.18em;max-width:900px;margin:0 auto;
   background:linear-gradient(90deg,#ff8a5c,#ff2b40 55%,#ff5e86);-webkit-background-clip:text;background-clip:text;color:transparent}
 .etna .big .ex-ch{display:inline-block}
+.etna .big .ex-word{display:inline-block;white-space:nowrap}
 .etna-jitter{animation:etnaJit .55s infinite ease-in-out alternate}
 @keyframes etnaJit{0%{transform:translate(0,1.5px) rotate(.5deg)}15%{transform:translate(-1px,1px) rotate(-1.5deg)}30%{transform:translate(1.5px,-1px) rotate(1deg)}45%{transform:translate(-1.5px,1.5px) rotate(-1.5deg)}60%{transform:translate(1px,-1.5px) rotate(1deg)}75%{transform:translate(-1px,1px) rotate(-1deg)}90%{transform:translate(.5px,-.5px) rotate(1deg)}100%{transform:translate(0,0) rotate(0)}}
 @media(prefers-reduced-motion:reduce){.etna-jitter{animation:none}}
@@ -621,7 +623,7 @@ img{max-width:100%;display:block}
    shows and can never overlap the copy or jump above it. */
 @media (max-height:840px), (max-width:768px){
   .hero .scroll-hint{position:static;bottom:auto;left:auto;transform:none;
-    margin:24px auto 0;margin-top:auto;animation:bobflow 1.8s ease-in-out infinite}
+    margin:clamp(30px,7vh,64px) auto 8px;animation:bobflow 1.8s ease-in-out infinite}
 }
 @keyframes bobflow{0%,100%{transform:translateY(0)}50%{transform:translateY(7px)}}
 
@@ -681,10 +683,10 @@ img{max-width:100%;display:block}
   </div>
 
   <div class="hero-sub">
-    <div class="be">Be <span class="dw"><span class="cr">D</span><span class="cr ki">I</span><span class="cb">V</span><span class="cb">E</span><span class="cw">R</span><span class="cb">S</span><span class="cw">O</span></span> con <span class="flow">D<span class="ki">I</span>VES</span></div>
+    <div class="be"><span class="kw">Be <span class="dw"><span class="cr">D</span><span class="cr ki">I</span><span class="cb">V</span><span class="cb">E</span><span class="cw">R</span><span class="cb">S</span><span class="cw">O</span></span></span> <span class="kw">con <span class="flow">D<span class="ki">I</span>VES</span></span></div>
   </div>
   <p class="hero-lead">
-    <span class="em">Il vino vero, con 7 gradi in meno!</span>
+    <span class="em"><span class="kw">Il vino vero,</span> <span class="kw">con 7 gradi in meno!</span></span>
     <span class="small">Un aperitivo così non si era mai visto: <br>leggero, per chi beve diverso</span>
     <span class="meta">Per chi beve meglio, non di più</span>
   </p>
@@ -1257,11 +1259,20 @@ img{max-width:100%;display:block}
     lines.forEach(function(line){
       var tmp=document.createElement('div'); tmp.innerHTML=line;
       var lineEl=document.createElement('span'); lineEl.style.display='block';
-      Array.from(tmp.textContent).forEach(function(ch){
-        var sp=document.createElement('span'); sp.className='ex-ch';
-        sp.style.display='inline-block';
-        sp.textContent=(ch===' ')?'\u00A0':ch;
-        lineEl.appendChild(sp); chars.push(sp);
+      /* S23: group chars by WORD (.ex-word is white-space:nowrap) so a word can
+         never break mid-letter on narrow screens; real spaces BETWEEN words stay
+         the only wrap points. Animation still targets the per-letter .ex-ch. */
+      tmp.textContent.split(' ').forEach(function(word,wi){
+        if(wi>0){ lineEl.appendChild(document.createTextNode(' ')); }
+        if(word===''){ return; }
+        var w=document.createElement('span'); w.className='ex-word';
+        Array.from(word).forEach(function(ch){
+          var sp=document.createElement('span'); sp.className='ex-ch';
+          sp.style.display='inline-block';
+          sp.textContent=ch;
+          w.appendChild(sp); chars.push(sp);
+        });
+        lineEl.appendChild(w);
       });
       big.appendChild(lineEl);
     });
