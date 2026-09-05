@@ -160,6 +160,11 @@ img{max-width:100%;display:block}
   animation:spin 5s linear infinite;filter:drop-shadow(0 1px 3px rgba(0,0,0,.5))}
 .rb-o svg{width:100%;height:100%;display:block}
 .rb-o.big{width:.74em;height:.74em}
+/* Alt 2 · BALL (tough-baboon-84) — oscillating red<->blue dot, replaces the spinning ring */
+.rb-ball{display:inline-flex;align-items:center;justify-content:center;width:1em;height:1em;line-height:1;font-size:.8em;margin:0 .06em;transform:translateY(.05em)}
+.ball2{width:.32em;height:.32em;border-radius:50%;background:#000;filter:drop-shadow(0 1px 3px rgba(0,0,0,.5));animation:ballosc .9s infinite alternate cubic-bezier(.68,-.55,.265,1.55)}
+@keyframes ballosc{0%{background:var(--red);transform:translateX(-.30em)}100%{background:var(--blue);transform:translateX(.30em)}}
+@media(prefers-reduced-motion:reduce){.ball2{animation:none;background:linear-gradient(90deg,var(--red),var(--blue))}}
 .redblue .q.split{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:.14em;margin:0 auto;max-width:min(1200px,94vw)}
 .redblue .q.split .side{white-space:nowrap}
 .redblue .q.split .l{justify-self:end}
@@ -704,7 +709,7 @@ img{max-width:100%;display:block}
     <div class="sec-head rise">
       <span class="eyebrow">Terra Dives · Sicilia</span>
       <h2>Vino vero.</h2>
-      <p>Nasce dal vero mosto di vino, ottenuto da uve siciliane raccolte a mano sulle colline di Mazara del Vallo e Petrosino. Vinificato in cantina, non miscelato in un impianto industriale.<br>Sotto ogni bottiglia c'è la vera Sicilia.</p>
+      <p>Nasce da uve siciliane raccolte a mano sulle rive del mare di Mazara del Vallo e Petrosino. Vinificato in cantina, non miscelato in un impianto industriale.<br>Sotto ogni bottiglia c'è la vera Sicilia.</p>
       <div class="hint-hover">✦ Passa il cursore sopra la bottiglia ✦</div>
     </div>
 
@@ -715,7 +720,7 @@ img{max-width:100%;display:block}
           <img class="reveal" src="transred.png" alt="Dives Red — le note di degustazione">
           <span class="beam" aria-hidden="true"></span>
         </div>
-        <div class="blabel"><div class="t">Red</div><div class="s">Nero d'Avola · frutti di bosco</div></div>
+        <div class="blabel"><div class="t">Red</div><div class="s">Vino rosso</div></div>
       </div>
       <div class="bcard blue rise d2">
         <div class="bstage">
@@ -723,11 +728,11 @@ img{max-width:100%;display:block}
           <img class="reveal" src="transblue.png" alt="Dives Blue — le note di degustazione">
           <span class="beam" aria-hidden="true"></span>
         </div>
-        <div class="blabel"><div class="t">Blue</div><div class="s">Grillo · frutta tropicale &amp; mela</div></div>
+        <div class="blabel"><div class="t">Blue</div><div class="s">Vino bianco</div></div>
       </div>
     </div>
 
-    <p class="realwine rise d2">Non un alcopop. <b>Vero mosto di vino siciliano</b>, <br>alleggerito con acqua, estratti e aromi naturali.</p>
+    <p class="realwine rise d2">Non un alcopop. <b>Vero vino siciliano</b>, <br>alleggerito con acqua, estratti e aromi naturali.</p>
   </div>
 </section>
 
@@ -735,7 +740,7 @@ img{max-width:100%;display:block}
 <section class="redblue" id="gusti">
   <div class="scan"></div>
   <div class="inner">
-    <div class="q split"><span class="side l">Red</span><span class="rb-o big" aria-hidden="true"><svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><defs><mask id="ringO"><rect width="100" height="100" fill="#000"/><circle cx="50" cy="50" r="43" fill="#fff"/><circle cx="50" cy="50" r="24" fill="#000"/></mask></defs><g mask="url(#ringO)"><rect x="0" y="0" width="50" height="100" fill="#ff2b40"/><rect x="50" y="0" width="50" height="100" fill="#3d7bff"/><rect x="47.6" y="5" width="4.8" height="23" fill="#fff"/><rect x="47.6" y="72" width="4.8" height="23" fill="#fff"/></g></svg></span><span style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">o</span><span class="side r">Blue?</span></div>
+    <div class="q split"><span class="side l">Red</span><span class="rb-ball" aria-hidden="true"><span class="ball2"></span></span><span style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">o</span><span class="side r">Blue?</span></div>
     <div class="sub">Scegli il tuo lato</div>
   </div>
 </section>
@@ -760,8 +765,8 @@ img{max-width:100%;display:block}
       <div class="art rise"><div class="halo"></div><img src="red2.png" alt="Dives Red"></div>
       <div class="txt rise d1">
         <div class="kicker">Red,<br>per il tramonto.</div>
-        <div class="grape"><span class="v">100% Nero d'Avola</span><span class="badge">6,5% vol</span></div>
-        <p class="tasting">«Al naso è fruttato, con note di fragolina e piccoli frutti rossi. In bocca è dolce, lievemente frizzante, con sentori di frutti di bosco.»</p>
+        <div class="grape"><span class="v">Basato su vino rosso</span><span class="badge">6,5% vol</span></div>
+        <p class="tasting">«Al naso è fruttato, con note di fragolina e piccoli frutti rossi. In bocca è piacevole, lievemente frizzante, con sentori di frutti di bosco.»</p>
         <div class="specs">
           <div class="spec"><div class="l">Zona</div><div class="v">Mazara del Vallo</div></div>
           <div class="spec"><div class="l">Terreno</div><div class="v">Argilloso</div></div>
@@ -785,8 +790,8 @@ img{max-width:100%;display:block}
       <div class="art rise"><div class="halo"></div><img src="blue2.png" alt="Dives Blue"></div>
       <div class="txt rise d1">
         <div class="kicker">Blue,<br>dopo la mezzanotte.</div>
-        <div class="grape"><span class="v">100% Grillo</span><span class="badge">6,5% vol</span></div>
-        <p class="tasting">«Al naso è fruttato, con note di frutta tropicale, fiori d'arancia e mela verde. In bocca è dolce, lievemente frizzante e piacevole.»</p>
+        <div class="grape"><span class="v">Basato su vino bianco</span><span class="badge">6,5% vol</span></div>
+        <p class="tasting">«Al naso è fruttato, con note di frutta tropicale, fiori d'arancia e mela verde. In bocca è lievemente frizzante, aromatico e molto piacevole.»</p>
         <div class="specs">
           <div class="spec"><div class="l">Zona</div><div class="v">Petrosino / Mazara del Vallo</div></div>
           <div class="spec"><div class="l">Terreno</div><div class="v">Calcareo-sabbioso</div></div>
@@ -853,7 +858,7 @@ img{max-width:100%;display:block}
     <div class="carousel3d" id="carousel3d">
       <div class="c3d-stage">
         <div class="c3d-item c1"><div class="n"><span class="dot"></span>Autentico</div><div class="d">Vero vino siciliano, non un alcopop.</div></div>
-        <div class="c3d-item c2"><div class="n"><span class="dot"></span>Leggero</div><div class="d">Bevi meglio, non di più.</div><div class="big">6,5% vol</div></div>
+        <div class="c3d-item c2"><div class="n"><span class="dot"></span>Leggero</div><div class="d">Bevi meglio, non di più.</div><div class="big">6,5% vol</div><div class="d">Ben freddo.</div></div>
         <div class="c3d-item c3"><div class="n"><span class="dot"></span>Facile</div><div class="d">Apri e sei in spiaggia. Niente ghiaccio, niente bicchiere: formato perfetto da 20 cl.</div></div>
         <div class="c3d-item c4"><div class="n"><span class="dot"></span>Bello</div><div class="d">Sta bene in mano e sul feed.</div></div>
         <div class="c3d-item c5"><div class="n"><span class="dot"></span>Sostenibile</div><div class="d">Vetro buono per te e per il pianeta.</div></div>
@@ -923,7 +928,7 @@ img{max-width:100%;display:block}
       </div>
       <div class="etna-neck" id="etnaNeck"></div>
     </div>
-    <div class="quote rise d3">«Il vino che piace anche a chi dice di non amare il vino»</div>
+    <div class="quote rise d3">Il "vino" che piace anche a chi dice di non amare il vino</div>
   </div>
 </section>
 
@@ -968,7 +973,7 @@ img{max-width:100%;display:block}
   </div>
   <div class="finale-bottom">
     <div class="wrap">
-      <p class="weigh rise d2">Un vino che pesa meno e conta di più</p>
+      <p class="weigh rise d2">Un "vino" che pesa meno e conta di più</p>
       <div class="cta-row rise d3">
         <a class="swipe-btn" href="#gusti" aria-label="Red o Blue?">
           <span class="s1">Red?...</span>
